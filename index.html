@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universe Aligned</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .screen {
+            display: none;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart-icon {
+            font-size: 4em;
+            color: #e74c3c;
+            margin-bottom: 25px;
+            animation: heartbeat 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #ff6b6b 0%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .names {
+            font-size: 1.6em;
+            color: #c44569;
+            margin-top: 25px;
+            font-weight: 500;
+        }
+
+        .password-input {
+            width: 100%;
+            max-width: 350px;
+            padding: 18px 25px;
+            font-size: 1.2em;
+            border: 2px solid #ff6b6b;
+            border-radius: 50px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+            margin-top: 35px;
+        }
+
+        .password-input:focus {
+            border-color: #c44569;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .btn-primary {
+            margin-top: 30px;
+            padding: 18px 60px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #ff6b6b 0%, #c44569 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 20px;
+            font-size: 1em;
+            display: none;
+            font-style: italic;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 107, 107, 0.2);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b 0%, #c44569 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease-out;
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            color: #c44569;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.8em;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        .options-container {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .option-btn {
+            padding: 20px 55px;
+            font-size: 1.2em;
+            border: 3px solid #ff6b6b;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+            font-weight: 500;
+            background: white;
+            color: #ff6b6b;
+            min-width: 180px;
+        }
+
+        .option-btn:hover {
+            background: linear-gradient(135deg, #ff6b6b 0%, #c44569 100%);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.5);
+        }
+
+        .funny-note {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            border: 3px dashed #ff6b6b;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        .funny-note.show {
+            display: block;
+        }
+
+        .funny-note p {
+            font-size: 1.2em;
+            color: #c44569;
+            font-style: italic;
+            margin: 0;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .answer-container {
+            display: none;
+            text-align: left;
+            margin-top: 40px;
+            padding: 35px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(196, 69, 105, 0.1) 100%);
+            border-left: 5px solid #ff6b6b;
+            border-radius: 20px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .answer-container.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer-text {
+            font-size: 1.2em;
+            color: #444;
+            line-height: 2;
+            text-align: justify;
+        }
+
+        .next-btn {
+            margin-top: 35px;
+            padding: 16px 50px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #ff6b6b 0%, #c44569 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Georgia', serif;
+            font-weight: 500;
+            display: none;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .final-screen {
+            text-align: center;
+        }
+
+        .final-screen h2 {
+            font-size: 2.8em;
+            color: #ff6b6b;
+            margin-bottom: 30px;
+        }
+
+        .final-screen p {
+            font-size: 1.35em;
+            color: #555;
+            line-height: 2.2;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-size: 1.6em;
+            color: #c44569;
+            margin-top: 45px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            .screen { padding: 40px 30px; }
+            .question-text { font-size: 1.4em; }
+            .options-container { 
+                flex-direction: column; 
+                gap: 20px;
+            }
+            .option-btn { 
+                width: 100%;
+                min-width: auto;
+            }
+            .answer-text { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="screen active" id="passwordScreen">
+            <div class="heart-icon">♥</div>
+            <h1>Universe Aligned</h1>
+            <p class="subtitle">A sacred journey written in the stars</p>
+            <input type="password" class="password-input" id="passwordInput" placeholder="Enter the secret word" autocomplete="off">
+            <br>
+            <button class="btn-primary" onclick="checkPassword()">Enter Our Universe</button>
+            <p class="error-message" id="errorMessage">The stars haven't aligned yet. Try again with love.</p>
+        </div>
+
+        <div class="screen" id="welcomeScreen">
+            <div class="heart-icon">♥</div>
+            <h1>Universe Aligned</h1>
+            <p class="subtitle">Seven questions, seven heartbeats, one eternal love</p>
+            <p class="names">Prudvi & Aishwarya</p>
+            <button class="btn-primary" onclick="startJourney()" style="margin-top: 50px;">Begin Our Journey</button>
+        </div>
+
+        <div class="screen" id="question1">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 14.28%;"></div>
+            </div>
+            <p class="question-number">Question 1 of 7</p>
+            <h2 class="question-text">Do you want to know what was running through my mind the very first time we met?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(1)">Not Yet</button>
+                <button class="option-btn" onclick="showAnswer(1)">Yes, Tell Me</button>
+            </div>
+            <div class="funny-note" id="funny1">
+                <p>😄 Really? You're going to make me wait? Fine, but I'm not going anywhere! Click whenever you're ready! 💕</p>
+            </div>
+            <div class="answer-container" id="answer1">
+                <p class="answer-text">Most people follow a predictable path—they meet, they get to know each other, and only then do they fall in love. But our story has always been wonderfully, beautifully unique. Long before we ever shared the same physical space, across different countries without ever seeing each other or feeling the energy in the room, we had already connected our souls simply by talking about life.
+                <br><br>
+                When the day finally came for us to meet in person, everything I thought I knew went out the window. Normally, I am perfectly confident—talking to someone new is usually effortless for me. But with you? Everything was entirely different. I was struck by an intense, overwhelming rush of nervousness, pure curiosity, and a heart that raced like never before. Words simply aren't enough to capture the electricity of that moment.
+                <br><br>
+                We told ourselves it was just a casual meeting, but the universe had grander plans. It drifted this beautiful soul right into my orbit, destined to stay parked by my side for the rest of my days.</p>
+                <button class="next-btn" onclick="nextQuestion(2)">Continue to Next Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question2">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 28.56%;"></div>
+            </div>
+            <p class="question-number">Question 2 of 7</p>
+            <h2 class="question-text">Can you guess the smallest, quietest thing you do that completely makes my day?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(2)">I'm Not Sure</button>
+                <button class="option-btn" onclick="showAnswer(2)">Tell Me</button>
+            </div>
+            <div class="funny-note" id="funny2">
+                <p>🤔 Hmm, playing hard to get? That's cute! But trust me, you'll want to hear this one! 😊</p>
+            </div>
+            <div class="answer-container" id="answer2">
+                <p class="answer-text">Don't think too hard, because the truth is... even I can't single out just one thing. It isn't a specific action or a particular word—it's the simple, undeniable fact that my day is never truly complete without the thought of you crossing my mind.
+                <br><br>
+                You are my quiet constant, like gravity holding my world together. I find myself praying to God every single day that I never lose this profound sense of completeness. Carrying you in my heart is what makes my universe whole, and simply knowing you exist in my life is the greatest gift I could ever ask for.</p>
+                <button class="next-btn" onclick="nextQuestion(3)">Continue to Next Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question3">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 42.84%;"></div>
+            </div>
+            <p class="question-number">Question 3 of 7</p>
+            <h2 class="question-text">Do you know why I become so hyperactive and childish when you're next to me?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(3)">I Wonder</button>
+                <button class="option-btn" onclick="showAnswer(3)">Show Me Why</button>
+            </div>
+            <div class="funny-note" id="funny3">
+                <p>😏 Oh, you wonder? Well, keep wondering... or just click "Show Me Why" already! I promise it's worth it! 🎯</p>
+            </div>
+            <div class="answer-container" id="answer3">
+                <p class="answer-text">Honestly, I couldn't give you the scientific reason behind it. But I do know this: when I hold your hand, you give me a fearless kind of confidence. You make me feel like I can take any leap in life and proudly say, "Yes, I did it."
+                <br><br>
+                When we are children, our parents hold our hands to keep us from falling, always standing right behind us to lift us back up if we stumble. Being with you gives me that exact same profound sense of safety. It feels as though God blessed me with that pure, unconditional, catch-me-when-I-fall kind of love all over again—this time, woven into the soul of my partner.
+                <br><br>
+                I am hyperactive and childish around you because, in your presence, my heart is completely safe.</p>
+                <button class="next-btn" onclick="nextQuestion(4)">Continue to Next Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question4">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 57.12%;"></div>
+            </div>
+            <p class="question-number">Question 4 of 7</p>
+            <h2 class="question-text">Do you have any idea why my eyes instinctively search for you, even in the crowded spaces I usually try to avoid?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(4)">Not Really</button>
+                <button class="option-btn" onclick="showAnswer(4)">I Want to Know</button>
+            </div>
+            <div class="funny-note" id="funny4">
+                <p>🙈 "Not really"? Oh come on! This is one of my favorites! Don't leave me hanging here! 💫</p>
+            </div>
+            <div class="answer-container" id="answer4">
+                <p class="answer-text">It has nothing to do with the location or the sea of strangers around us. To me, it's simply about finding my woman. No matter how many people surround me, my eyes are hardwired to seek out the one person who has made a permanent home in my heart.
+                <br><br>
+                You are so deeply woven into who I am—occupying every thought and heartbeat—that I am completely powerless against it. You are all over my soul, and I honestly wouldn't want it any other way. In any room, in any crowd, my compass will always point straight to you.</p>
+                <button class="next-btn" onclick="nextQuestion(5)">Continue to Next Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question5">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 71.4%;"></div>
+            </div>
+            <p class="question-number">Question 5 of 7</p>
+            <h2 class="question-text">Do you know what the absolute best part of my everyday life is?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(5)">I'm Curious</button>
+                <button class="option-btn" onclick="showAnswer(5)">Tell Me Everything</button>
+            </div>
+            <div class="funny-note" id="funny5">
+                <p>🤨 Curious but not clicking? That's some serious self-control! But seriously, just click it! 😜</p>
+            </div>
+            <div class="answer-container" id="answer5">
+                <p class="answer-text">Ever since we met and began building this beautiful bond, simply sharing each day with you has become the best part of my life, without a single doubt.
+                <br><br>
+                I know our future won't always be flawless. We will have our arguments, and there will be moments of frustration—that's just the reality of two orbits sharing the same space. But through every high and every low, choosing you remains the absolute greatest decision I have ever made. I will spend the rest of our journey together cherishing that choice, embracing our imperfections, and loving the beautiful life we are building.</p>
+                <button class="next-btn" onclick="nextQuestion(6)">Continue to Next Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question6">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 85.68%;"></div>
+            </div>
+            <p class="question-number">Question 6 of 7</p>
+            <h2 class="question-text">Are we ready to see how many more galaxies we are going to explore together?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(6)">Maybe Later</button>
+                <button class="option-btn" onclick="showAnswer(6)">Yes, I'm Ready</button>
+            </div>
+            <div class="funny-note" id="funny6">
+                <p>⏰ "Maybe later"? We're talking about exploring galaxies together and you want to postpone? Okay then! 😂</p>
+            </div>
+            <div class="answer-container" id="answer6">
+                <p class="answer-text">I am more than ready, but if I'm being completely honest, I'm also a little scared. Loving you has effortlessly become my unconditional purpose, growing stronger and deeper with every passing day. It's the most beautiful feeling in the world, yet the profound weight of loving someone this much, for the rest of my life, is breathtaking.
+                <br><br>
+                I know there will be times when our days don't align exactly how we planned them. But please remember: a misaligned day never means my love for you has faded. You are permanently settled in my heart, and you always will be. It will only ever be you. I am yours completely, and my heart is entirely closed off to the rest of the world—there is no space for anyone else.</p>
+                <button class="next-btn" onclick="nextQuestion(7)">Continue to Final Question →</button>
+            </div>
+        </div>
+
+        <div class="screen" id="question7">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%;"></div>
+            </div>
+            <p class="question-number">Question 7 of 7</p>
+            <h2 class="question-text">Do you still want to know why I chose you?</h2>
+            <div class="options-container">
+                <button class="option-btn" onclick="showFunnyNote(7)">Let Me Think</button>
+                <button class="option-btn" onclick="showAnswer(7)">Yes, Please</button>
+            </div>
+            <div class="funny-note" id="funny7">
+                <p>🤷‍♂️ Still thinking? This is the grand finale! The final answer! Don't make me wait forever! 💝</p>
+            </div>
+            <div class="answer-container" id="answer7">
+                <p class="answer-text">I chose you because of the undeniable electricity of our first meeting across borders. I chose you because you are my quiet constant, the gravity that makes my day complete. I chose you because holding your hand makes me fearless, and because in any crowded room, my soul's compass will always point directly to you. I chose you because, despite the imperfections of life, you are the greatest decision I have ever made, and loving you unconditionally is my favorite purpose.
+                <br><br>
+                All of these moments and feelings combine into one beautiful truth: they are the reasons I choose to walk the sacred seven steps of life by your side. But a love this profound cannot be contained in just one lifetime. My ultimate prayer is that our stars remain aligned, walking hand-in-hand, not just for this life—but for seven births to come.</p>
+                <button class="next-btn" onclick="showFinalScreen()">See the Final Message →</button>
+            </div>
+        </div>
+
+        <div class="screen final-screen" id="finalScreen">
+            <div class="heart-icon">♥</div>
+            <h2>Forever Aligned</h2>
+            <p>Through seven questions, I've laid bare my heart.<br>
+            Through seven answers, I've shown you my soul.<br>
+            Through seven lifetimes, I'll choose you again and again.</p>
+            <p class="signature">With all my love, for all of time<br>~ Prudvi</p>
+        </div>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMessage = document.getElementById('errorMessage');
+
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            const password = passwordInput.value;
+            if (password === 'Togetherness') {
+                hideScreen('passwordScreen');
+                showScreen('welcomeScreen');
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function startJourney() {
+            hideScreen('welcomeScreen');
+            showScreen('question1');
+        }
+
+        function showFunnyNote(questionNum) {
+            const funnyNote = document.getElementById('funny' + questionNum);
+            funnyNote.classList.add('show');
+            
+            setTimeout(() => {
+                funnyNote.classList.remove('show');
+            }, 4000);
+        }
+
+        function showAnswer(questionNum) {
+            const answerContainer = document.getElementById('answer' + questionNum);
+            const nextBtn = answerContainer.querySelector('.next-btn');
+            
+            answerContainer.classList.add('show');
+            nextBtn.classList.add('show');
+            
+            // Scroll to answer smoothly
+            setTimeout(() => {
+                answerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function nextQuestion(nextNum) {
+            const currentScreen = 'question' + (nextNum - 1);
+            const nextScreen = 'question' + nextNum;
+            
+            hideScreen(currentScreen);
+            showScreen(nextScreen);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showFinalScreen() {
+            hideScreen('question7');
+            showScreen('finalScreen');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideScreen(screenId) {
+            document.getElementById(screenId).classList.remove('active');
+        }
+
+        function showScreen(screenId) {
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
